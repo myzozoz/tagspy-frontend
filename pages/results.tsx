@@ -18,7 +18,7 @@ const ResultsPage: NextPage<Props> = ({results}) => {
         minSize={12}
         maxSize={100}
         tags={data}
-        onClick={tag => console.log(`'${tag.value}' was clicked!`)}/>
+        onClick={(tag: any) => console.log(`'${tag.value}' was clicked!`)}/>
       <Link href='/'>
         <button>Go Back</button>
       </Link>
