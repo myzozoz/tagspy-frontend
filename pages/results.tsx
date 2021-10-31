@@ -1,25 +1,31 @@
 import type { NextPage } from 'next'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
+import useSWR from 'swr'
 import styles from '../styles/results.module.css'
+
 
 import { TagCloud } from 'react-tagcloud'
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 type Props = {
-  results: any,
+  url: string,
 }
 
-const ResultsPage: NextPage<Props> = ({results}) => {
-  const data = results.top_keywords || []
+const ResultsPage: NextPage<Props> = ({url}) => {
+  const {data, error} = useSWR(url, fetcher)
+  const keywords = data && data.top_keywords
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>Top Keywords:</h1>
-      <TagCloud
+      { error && <p>An error happened while loading, we&apos;re sorry :(</p>}
+      { !keywords ? <p>loading...</p>: <TagCloud
         minSize={12}
         maxSize={60}
-        tags={data}
-        onClick={(tag: any) => console.log(`'${tag.value}' was clicked!`)}/>
+        tags={keywords}
+        onClick={(tag: any) => console.log(`'${tag.value}' was clicked!`)}/>}
       <Link href='/' passHref>
         <button className={styles.back_button}>Go Back</button>
       </Link>
@@ -29,12 +35,10 @@ const ResultsPage: NextPage<Props> = ({results}) => {
 
 export const getServerSideProps: GetServerSideProps = async (context)  => {
   const url = process.env.TAGSPY_API_URL + "/summary?tags=" + context.query.tags
-  const res = await fetch(url)
-  const data = await res.text()
 
   return {
     props: {
-      results: JSON.parse(data)
+      url
     }, // will be passed to the page component as props
   }
 }
