@@ -24,7 +24,7 @@ const Home: NextPage<Props> = ({tags}) =>
         </h1>
 
         <div>
-          <p className={styles.description}>TagSpy is a service, that lets you find keywords in Steam reviews. The app works by taking Steam tags as input (field below), searching for games with those tags and then performing analysis for a portion of the most helpful reviews of those games.</p>
+          <p className={styles.description}>TagSpy is a service that lets you find keywords in Steam reviews. The app works by taking Steam tags as input (field below), searching for games with those tags and then performing analysis for a portion of the most helpful reviews of those games.</p>
         </div>
 
         <TagForm tags={tags}/>

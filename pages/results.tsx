@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
+import styles from '../styles/results.module.css'
 
 import { TagCloud } from 'react-tagcloud'
 
@@ -9,18 +10,18 @@ type Props = {
 }
 
 const ResultsPage: NextPage<Props> = ({results}) => {
-  console.log(results)
   const data = results.top_keywords || []
 
   return (
-    <div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Top Keywords:</h1>
       <TagCloud
         minSize={12}
         maxSize={100}
         tags={data}
         onClick={(tag: any) => console.log(`'${tag.value}' was clicked!`)}/>
       <Link href='/' passHref>
-        <button>Go Back</button>
+        <button className={styles.back_button}>Go Back</button>
       </Link>
     </div>
   )
