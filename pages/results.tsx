@@ -17,7 +17,7 @@ const ResultsPage: NextPage<Props> = ({results}) => {
       <h1 className={styles.title}>Top Keywords:</h1>
       <TagCloud
         minSize={12}
-        maxSize={100}
+        maxSize={60}
         tags={data}
         onClick={(tag: any) => console.log(`'${tag.value}' was clicked!`)}/>
       <Link href='/' passHref>
