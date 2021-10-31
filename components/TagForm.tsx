@@ -1,34 +1,26 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import styles from '../styles/TagForm.module.css'
+import Select from 'react-select'
 
 const TAG_MAX_LENGTH = 30
 const MAX_TAGS = 5
 
 
+type Props = {
+  tags: string[]
+}
 
 
-
-export const TagForm = () => {
+export const TagForm = ({tags}: Props) => {
   const [tagList, setTagList] = useState([''])
   const router = useRouter()
+  const tagOptions = tags.sort().map((t: string): {value: string, label: string} => ({ value: t.toLowerCase(), label: t}))
 
-  const changeTagValue = (value: string, i: number): void => {
-    const newTags = [...tagList]
-    if (value.length <= TAG_MAX_LENGTH)
-      newTags[i] = value
-    
-    setTagList(newTags)
+  const handleChange = (newValue: any) => {
+    setTagList(newValue.map((v: any) => v.label))
   }
 
-  const changeTagAmount = (value: number): void => {
-    const newTags = [...tagList]
-    if ( value > 0 && tagList.length < MAX_TAGS)
-      newTags.push('')
-    else if (value < 0 && tagList.length > 1)
-      newTags.pop()
-    setTagList(newTags)
-  }
 
   const handleSubmit = (e: any) => {
     e.preventDefault()
@@ -43,27 +35,14 @@ export const TagForm = () => {
   }
 
   return (
-    <div>
-      <form className={styles.container} onSubmit={(e) => handleSubmit(e)}>
-        Enter tags:
-        { tagList.map((tag, i) =>
-          <input
-            key={i}
-            type="text"
-            name="tag-input"
-            value={tag}
-            onChange={(e) => changeTagValue(e.target.value, i)} />
-          )}
-        <div>
-          <button type="button" onClick={() => changeTagAmount(1)}>
-            Add tag
-          </button>
-          <button type="button" onClick={() => changeTagAmount(-1)}>
-            Remove tag
-          </button>
-        </div>
-        <input type="submit" />
-      </form>
+    <div className={styles.container}>
+      <Select className={styles.select}
+        options={tagOptions}
+        isMulti={true}
+        autoFocus={true}
+        onChange={handleChange}
+      />
+      <input className={styles.submit_button} type="submit" onClick={handleSubmit}/>
       
     </div>
   )

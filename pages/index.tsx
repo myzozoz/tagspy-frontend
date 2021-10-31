@@ -2,8 +2,13 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import { TagForm } from '../components/TagForm'
+import { GetStaticProps } from 'next'
 
-const Home: NextPage = () =>
+type Props = {
+  tags: string[]
+}
+
+const Home: NextPage<Props> = ({tags}) =>
 {
   return (
     <div className={styles.container}>
@@ -18,13 +23,30 @@ const Home: NextPage = () =>
           Welcome to TagSpy!
         </h1>
 
-        <TagForm />
+        <div>
+          <p className={styles.description}>TagSpy is a service, that lets you find keywords in Steam reviews. The app works by taking Steam tags as input (field below), searching for games with those tags and then performing analysis for a portion of the most helpful reviews of those games.</p>
+        </div>
+
+        <TagForm tags={tags}/>
 
       </main>
 
       
     </div>
   )
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const url = process.env.TAGSPY_API_URL + "/tags"
+  const res = await fetch(url)
+  const data = await res.text()
+
+  
+  return {
+    props:{
+      tags: JSON.parse(data)
+    }
+  }
 }
 
 export default Home

@@ -19,7 +19,7 @@ const ResultsPage: NextPage<Props> = ({results}) => {
         maxSize={100}
         tags={data}
         onClick={(tag: any) => console.log(`'${tag.value}' was clicked!`)}/>
-      <Link href='/'>
+      <Link href='/' passHref>
         <button>Go Back</button>
       </Link>
     </div>
@@ -27,8 +27,8 @@ const ResultsPage: NextPage<Props> = ({results}) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context)  => {
-  const url_base = process.env.NODE_ENV === 'development' ? "http://localhost:5000/api/games?tags=" : "https://tagspy-service.herokuapp.com/api/games?tags="
-  const res = await fetch(url_base + context.query.tags)
+  const url = process.env.TAGSPY_API_URL + "/summary?tags=" + context.query.tags
+  const res = await fetch(url)
   const data = await res.text()
 
   return {
